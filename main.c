@@ -6,6 +6,7 @@
 #include "interpreter.h"
 #include "interrupt.h"
 #include "spi.h"
+#include "gpio.h"
 
 #define FILE_COUNTER            "file_counter.bin"
 #define FILE_PC                 "file_pc.bin"
@@ -45,6 +46,7 @@ int main(int argc, char *argv[]) {
     if(int_gen>0)
         set_intterrupt(int_gen);        //zapamietaj kiedy wywolac przerwanie
 
+    gpio_init();
     spi_init();
 
     for(;;){
