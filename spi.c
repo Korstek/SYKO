@@ -100,12 +100,12 @@ void spi_init() //Pierwsze załadowanie wszystkich rejestrów
 
 }
 
-void spi(void)
+void spi(void) //powtarzane przy każdym "takcie"
 {
     if(divider(getCounter())==1)
     {
         shift_register(1); //wstawić wartość odebranego bitu
-        printf("shift_register=0x%02X]\n", getMEMD(0x4E));
+        printf("shift_register=0x%02X\n", getMEMD(0x4E));
     }
 }
 
