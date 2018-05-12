@@ -10,6 +10,12 @@ DataType DDRB_REGISTER;
 CounterType gpio_in[length];
 int div_count; //okresla ile razy sygnal sie zmienil
 
+/********************************************
+*funkcja: inicjalizacja gpio (rejestry,     *
+*pliki i zmienne                            *
+*argument: brak                             *
+*wartosc zwracana: brak                     *
+*********************************************/
 void gpio_init()
 {
     // /* rozwiązanie awaryjne - należy usunąć przed oddaniem
@@ -32,11 +38,25 @@ void gpio_init()
     div_count=0;
 }
 
+/********************************************
+*funkcja: sluzy do kontroli gpio w czasie   *
+*rzeczywistym                               *
+*argument: brak                             *
+*wartosc zwracana: brak                     *
+*********************************************/
 void gpio(void)
 {
     signal();
 }
 
+/********************************************
+*funkcja: plik z sygnalem zawiera tylko     *
+*momenty jego zmiany, ale jako ze jest to   *
+*sygnal 0/1 mozemy go w pelni odtworzyc     *
+*(zakladamy, ze na poczotku jest 0)         *
+*argument: brak                             *
+*wartosc zwracana: brak                     *
+*********************************************/
 void signal(void)
 {
     if(gpio_in[div_count]==getCounter())
@@ -49,11 +69,21 @@ void signal(void)
     }
 }
 
+/********************************************
+*funkcja: odczyt wartosci pinu miso         *
+*argument: brak                             *
+*wartosc zwracana: stan pinu (1-high, 0-low)*
+*********************************************/
 int get_miso()
 {
     return (getMEMD(0x25) & 0b00010000)>>4;
 }
 
+/********************************************
+*funkcja: ustawianie wartosci pinu miso     *
+*argument: nowy stan pinu (1-high, 0-low)   *
+*wartosc zwracana: brak                     *
+*********************************************/
 void set_miso(int pin)
 {
     if(pin==1)
@@ -62,6 +92,11 @@ void set_miso(int pin)
         setMEMD(0x25,(getMEMD(0x25)&0xEF));
 }
 
+/********************************************
+*funkcja: ustawianie wartosci pinu mosi     *
+*argument: nowy stan pinu (1-high, 0-low)   *
+*wartosc zwracana: brak                     *
+*********************************************/
 void set_mosi(int pin)
 {
     if(pin==1)
@@ -70,6 +105,12 @@ void set_mosi(int pin)
         setMEMD(0x25,(getMEMD(0x25)&0xF7));
 }
 
+/********************************************
+*funkcja: ustawianie wartosci pinu sck      *
+*(sygnalu synchronizujacego)                *
+*argument: nowy stan pinu (1-high, 0-low)   *
+*wartosc zwracana: brak                     *
+*********************************************/
 void set_sck(int pin)
 {
     if(pin==1)
@@ -79,6 +120,12 @@ void set_sck(int pin)
 
 }
 
+/********************************************
+*funkcja: ustawianie wartosci pinu ss       *
+*(slave select)                             *
+*argument: nowy stan pinu (1-high, 0-low)   *
+*wartosc zwracana: brak                     *
+*********************************************/
 void set_ss(int pin)
 {
     if(pin==1)
@@ -87,6 +134,11 @@ void set_ss(int pin)
         setMEMD(0x25,(getMEMD(0x25)&0xFB));
 }
 
+/********************************************
+*funkcja: odczyt pliku z sygnalem wejsciowym*
+*argument: nazwa pliku                      *
+*wartosc zwracana: brak                     *
+*********************************************/
 void loadData(char *file)
 {
     FILE *fp;
@@ -96,7 +148,7 @@ void loadData(char *file)
     if ((fp = fopen (file, "r")) == NULL)
     printf("GPIO_IN file not found (%s)!\n", file);
 
-    while (!feof (fp) && fscanf (fp, "%lu", &value) && i++ < length )
+    while (!feof (fp) && fscanf (fp, "%lu", &value) && i++ < length ) //pobierane dane w unsigned long
     {
         gpio_in[i-1] = value;
     }
