@@ -19,7 +19,13 @@ int WCOL0;
 int SPI2X0;
 
 int period;
+int prev_count;
 
+/********************************************
+*funkcja: inicjalizacja spi (rejestry)      *
+*argument: brak                             *
+*wartosc zwracana: brak                     *
+*********************************************/
 void spi_init() //Pierwsze załadowanie wszystkich rejestrów
 {
     // /* rozwiązanie awaryjne - należy usunąć przed oddaniem
@@ -98,26 +104,44 @@ void spi_init() //Pierwsze załadowanie wszystkich rejestrów
     else
         printf("SPI jest wylaczone\n");
 
+    prev_count=0;
 }
 
+/********************************************
+*funkcja: sluzy do kontroli spi w czasie    *
+*rzeczywistym                               *
+*argument: brak                             *
+*wartosc zwracana: brak                     *
+*********************************************/
 void spi(void) //powtarzane przy każdym "takcie"
 {
-    if(divider(getCounter())==1)
-    {
-        shift_register(1); //wstawić wartość odebranego bitu
-        printf("shift_register=0x%02X\n", getMEMD(0x4E));
-    }
+    if(prev_count==1)
+        if(divider(getCounter())==0)
+        {
+            shift_register(1); //wstawić wartość odebranego bitu
+        }
+    prev_count=divider(getCounter());
 }
 
+/********************************************
+*funkcja: dzielnik czestotliwosci           *
+*argument: czas symulacji (counter)         *
+*wartosc zwracana: zredukowana czestotliwosc*
+*********************************************/
 int divider(int time)
 {
-    if(time%period==0)
+    if((time%period)<(period/2))
         return 1;
     else
         return 0;
 }
 
-
+/********************************************
+*funkcja: rejestr przesuwny                 *
+*argument: dostawiany bit (z prawej lub     *
+lewej - zalezy od konfiguracji              *
+*wartosc zwracana: brak                     *
+*********************************************/
 void shift_register(unsigned char bit)
 {
     if(DORD0==1)
