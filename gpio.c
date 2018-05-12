@@ -3,7 +3,12 @@
 #include "types.h"
 #include "mem_abs.h"
 
+#define FILE_GPIO_IN               "file_gpio_in.txt"
+#define length                      10
+
 DataType DDRB_REGISTER;
+CounterType gpio_in[length];
+int div_count; //okresla ile razy sygnal sie zmienil
 
 void gpio_init()
 {
@@ -23,12 +28,38 @@ void gpio_init()
     else
         printf("GPIO nie jest poprawnie skonfigurowane\n");
 
+    loadData(FILE_GPIO_IN);
+    div_count=0;
 }
 
+void gpio(void)
+{
+    signal();
+}
+
+void signal(void)
+{
+    if(gpio_in[div_count]==getCounter())
+    {
+        div_count++;
+        if(div_count%2==0)
+            set_miso(0);
+        else
+            set_miso(1);
+    }
+}
 
 int get_miso()
 {
     return (getMEMD(0x25) & 0b00010000)>>4;
+}
+
+void set_miso(int pin)
+{
+    if(pin==1)
+        setMEMD(0x25,((getMEMD(0x25)&0xEF)|(0x01<<4)));
+    else
+        setMEMD(0x25,(getMEMD(0x25)&0xEF));
 }
 
 void set_mosi(int pin)
@@ -54,4 +85,20 @@ void set_ss(int pin)
         setMEMD(0x25,((getMEMD(0x25)&0xFB)|(0x01<<2)));
     else
         setMEMD(0x25,(getMEMD(0x25)&0xFB));
+}
+
+void loadData(char *file)
+{
+    FILE *fp;
+    CounterType value;
+    int i = 0;
+
+    if ((fp = fopen (file, "r")) == NULL)
+    printf("GPIO_IN file not found (%s)!\n", file);
+
+    while (!feof (fp) && fscanf (fp, "%lu", &value) && i++ < length )
+    {
+        gpio_in[i-1] = value;
+    }
+    fclose (fp);
 }

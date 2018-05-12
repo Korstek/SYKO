@@ -50,6 +50,7 @@ int main(int argc, char *argv[]) {
     spi_init();
 
     for(;;){
+        gpio();
         spi();
         T=getOpcode();                  //T=opcode operacji (w³¹cznie z arg. wbudowanym)
         doInstr(T);                     //wykonaj instrukcje
