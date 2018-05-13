@@ -20,7 +20,7 @@ void gpio_init()
 {
     // /* rozwiązanie awaryjne - należy usunąć przed oddaniem
     setMEMD(0x24,0x2C);
-    setMEMD(0x25,0x00);
+    setMEMD(0x25,0x04);
     // */
     DDRB_REGISTER=getMEMD(0x24);
 
@@ -37,6 +37,8 @@ void gpio_init()
     loadData(FILE_GPIO_IN);
     div_count=0;
     transmission_counter=0;
+
+    set_ss(0); //transmisja od samego poczatku
 }
 
 /********************************************
@@ -60,7 +62,7 @@ void gpio(void)
 *********************************************/
 void signal(void)
 {
-    if(get_ss()==1)
+    if(get_ss()==0)
     {
         if(gpio_in[div_count]==transmission_counter)
         {

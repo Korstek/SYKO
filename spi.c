@@ -20,7 +20,7 @@ int WCOL0;
 int SPI2X0;
 
 int period;
-int prev_count;
+int prev_count, shift_reg_count;
 
 /********************************************
 *funkcja: inicjalizacja spi (rejestry)      *
@@ -105,7 +105,8 @@ void spi_init() //Pierwsze załadowanie wszystkich rejestrów
     else
         printf("SPI jest wylaczone\n");
 
-    prev_count=0;
+    prev_count=1;
+    shift_reg_count=0;
 }
 
 /********************************************
@@ -116,13 +117,21 @@ void spi_init() //Pierwsze załadowanie wszystkich rejestrów
 *********************************************/
 void spi(void) //powtarzane przy każdym "takcie"
 {
-    if(prev_count==1)
-        if(divider(getCounter())==0)
+    if((divider(getCounter())==1)&&(prev_count==0)&&((getMEMD(0x4D)&0x80)==0x00))
+    {
+        shift_reg_count++;
+        shift_register(get_miso());
+        if(shift_reg_count==8)
         {
-            shift_register(get_miso());
+            shift_reg_count=0;
+            setMEMD(0x4D,(getMEMD(0x4D)&0x7F)|0x80); //ustawianie flagi SPIF0 po odebraniu
+            set_ss(1); //ustawianie SS na 1 - informacja o przetwarzaniu danych dla slavea
+            printf("SPIF0! | shift_register: 0x%02x\n",getMEMD(0x4E));
         }
+    }
     prev_count=divider(getCounter()); //warunki sluza do sprawdzania zmiany stanu ("rising_edge")
-    set_sck(divider(getCounter()));
+    set_sck(divider(getCounter())); //wysterowanie sck
+    printf("sck: %d | shift_register: 0x%02x\n",divider(getCounter()), getMEMD(0x4E));
 }
 
 /********************************************
@@ -150,4 +159,5 @@ void shift_register(unsigned char bit)
         setMEMD(0x4E,(getMEMD(0x4E)>>1) | (0xf0 & bit));
     else
         setMEMD(0x4E,(getMEMD(0x4E)<<1) | (0x01 & bit));
+    //printf("shift_register: 0x%02x\n", getMEMD(0x4E));
 }
