@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "types.h"
 #include "mem_abs.h"
+#include "gpio.h"
 
 DataType SPI_STATUS_REGISTER;
 DataType SPI_CONTROL_REGISTER;
@@ -118,9 +119,10 @@ void spi(void) //powtarzane przy każdym "takcie"
     if(prev_count==1)
         if(divider(getCounter())==0)
         {
-            shift_register(1); //wstawić wartość odebranego bitu
+            shift_register(get_miso());
         }
-    prev_count=divider(getCounter());
+    prev_count=divider(getCounter()); //warunki sluza do sprawdzania zmiany stanu ("rising_edge")
+    set_sck(divider(getCounter()));
 }
 
 /********************************************
