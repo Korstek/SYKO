@@ -8,7 +8,7 @@
 
 DataType DDRB_REGISTER;
 CounterType gpio_in[length];
-int div_count; //okresla ile razy sygnal sie zmienil
+int div_count, transmission_counter; //okresla ile razy sygnal sie zmienil, czas od rozpoczecia transmisji
 
 /********************************************
 *funkcja: inicjalizacja gpio (rejestry,     *
@@ -36,6 +36,7 @@ void gpio_init()
 
     loadData(FILE_GPIO_IN);
     div_count=0;
+    transmission_counter=0;
 }
 
 /********************************************
@@ -59,13 +60,17 @@ void gpio(void)
 *********************************************/
 void signal(void)
 {
-    if(gpio_in[div_count]==getCounter())
+    if(get_ss()==1)
     {
-        div_count++;
-        if(div_count%2==0)
-            set_miso(0);
-        else
-            set_miso(1);
+        if(gpio_in[div_count]==transmission_counter)
+        {
+            div_count++;
+            if(div_count%2==0)
+                set_miso(0);
+            else
+                set_miso(1);
+        }
+        transmission_counter++;
     }
 }
 
@@ -118,6 +123,16 @@ void set_sck(int pin)
     else
         setMEMD(0x25,(getMEMD(0x25)&0xDF));
 
+}
+
+/********************************************
+*funkcja: odczyt wartosci pinu ss           *
+*argument: brak                             *
+*wartosc zwracana: stan pinu (1-high, 0-low)*
+*********************************************/
+int get_ss(void)
+{
+    return (getMEMD(0x25) & 0b00000100)>>2;
 }
 
 /********************************************

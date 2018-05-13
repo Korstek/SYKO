@@ -10,6 +10,8 @@ void gpio(void);
 
 void set_mosi(int pin);
 void set_sck(int pin);
+
+int get_ss(void);
 void set_ss(int pin);
 
 void loadData(char *file);
