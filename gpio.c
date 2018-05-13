@@ -113,6 +113,17 @@ void set_mosi(int pin)
 }
 
 /********************************************
+*funkcja: odczyt wartosci pinu sck          *
+*argument: brak                             *
+*wartosc zwracana: stan pinu (1-high, 0-low)*
+*********************************************/
+int get_sck(void)
+{
+    return (getMEMD(0x25) & 0b00100000)>>5;
+
+}
+
+/********************************************
 *funkcja: ustawianie wartosci pinu sck      *
 *(sygnalu synchronizujacego)                *
 *argument: nowy stan pinu (1-high, 0-low)   *

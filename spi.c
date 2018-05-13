@@ -131,7 +131,7 @@ void spi(void) //powtarzane przy każdym "takcie"
     }
     prev_count=divider(getCounter()); //warunki sluza do sprawdzania zmiany stanu ("rising_edge")
     set_sck(divider(getCounter())); //wysterowanie sck
-    printf("sck: %d | shift_register: 0x%02x\n",divider(getCounter()), getMEMD(0x4E));
+    //printf("sck: %d | shift_register: 0x%02x\n",divider(getCounter()), getMEMD(0x4E));
 }
 
 /********************************************
@@ -153,11 +153,21 @@ int divider(int time)
 lewej - zalezy od konfiguracji              *
 *wartosc zwracana: brak                     *
 *********************************************/
-void shift_register(unsigned char bit)
+void shift_register(DataType bit)
 {
     if(DORD0==1)
         setMEMD(0x4E,(getMEMD(0x4E)>>1) | (0xf0 & bit));
     else
         setMEMD(0x4E,(getMEMD(0x4E)<<1) | (0x01 & bit));
     //printf("shift_register: 0x%02x\n", getMEMD(0x4E));
+}
+
+/********************************************
+*funkcja: odczyt rejestru przesuwnego       *
+*argument: brak                             *
+*wartosc zwracana: rejestr przesuwny        *
+*********************************************/
+DataType get_shift_register(void)
+{
+    return getMEMD(0x4E);
 }
