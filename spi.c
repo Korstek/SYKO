@@ -15,10 +15,6 @@ int CPOL0;
 int CPHA0;
 int SPR0[2];
 
-int SPIF0;
-int WCOL0;
-int SPI2X0;
-
 int period;
 int prev_count, shift_reg_count;
 
@@ -46,9 +42,9 @@ void spi_init() //Pierwsze załadowanie wszystkich rejestrów
     SPR0[1]=(SPI_CONTROL_REGISTER & 0b00000010)>>1;
     SPR0[0]=SPI_CONTROL_REGISTER & 0b0000001;
 
-    SPIF0=(SPI_STATUS_REGISTER & 0b10000000)>>7;
-    WCOL0=(SPI_STATUS_REGISTER & 0b01000000)>>6;
-    SPI2X0=SPI_STATUS_REGISTER & 0b0000001;
+    int SPIF0=(SPI_STATUS_REGISTER & 0b10000000)>>7;
+    int WCOL0=(SPI_STATUS_REGISTER & 0b01000000)>>6;
+    int SPI2X0=SPI_STATUS_REGISTER & 0b0000001;
 
     /* Tym można zprawdzić poprawność odczytu rejestrów:
     printf("SPIE0=%d\n",SPIE0);
