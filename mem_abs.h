@@ -31,4 +31,9 @@ void setFlagsRegister(int b);
 void resetFlagsRegister(int b);
 int getFlagsRegister(int b);
 
+void setSP(AddressType p);
+AddressType getSP(void);
+void incSP(void);
+void decSP(void);
+
 #endif //__MEM_ABS_H__

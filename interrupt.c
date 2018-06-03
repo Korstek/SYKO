@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "gpio.h"
+#include "types.h"
+#include "mem_abs.h"
 
 void initInterrupt(void){
     //....

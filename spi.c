@@ -46,7 +46,7 @@ void spi_init() //Pierwsze załadowanie wszystkich rejestrów
     int WCOL0=(SPI_STATUS_REGISTER & 0b01000000)>>6;
     int SPI2X0=SPI_STATUS_REGISTER & 0b0000001;
 
-    /* Tym można zprawdzić poprawność odczytu rejestrów:
+    /*//Tym można zprawdzić poprawność odczytu rejestrów:
     printf("SPIE0=%d\n",SPIE0);
     printf("SPE0=%d\n",SPE0);
     printf("DORD0=%d\n",DORD0);
@@ -59,7 +59,7 @@ void spi_init() //Pierwsze załadowanie wszystkich rejestrów
     printf("SPIF0=%d\n",SPIF0);
     printf("WCOL0=%d\n",WCOL0);
     printf("SPI2X0=%d\n",SPI2X0);
-    */
+*/
 
     if(SPI2X0==1)
         if(SPR0[1]==1)

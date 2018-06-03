@@ -7,10 +7,13 @@ include_directories(.)
 
 add_executable(SYKO
         f_add1.c
+        f_rjmp.c
         file_code.bin
         file_counter.bin
         file_data.bin
         file_pc.bin
+        gpio.c
+        gpio.h
         interpreter.c
         interpreter.h
         interrupt.c
@@ -22,4 +25,4 @@ add_executable(SYKO
         README.md
         spi.c
         spi.h
-        types.h)
+        types.h f_in.c f_out.c f_sbrs.c f_ret.c)

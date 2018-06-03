@@ -21,6 +21,7 @@ DataType    *EIO_REG=(DataType*)(&(MEMD[EIO_REGISTERS_IN_MEMD_OFFSET]));    //de
 AddressType   PC;                   //licznik rozkazów
 DataType    FLAGS;                  //flagi procesora
 CounterType counter;                //licznik wykonanych cykli
+AddressType SP;                     //Stack Pointer
 
 void dumpMEMConfiguration(void){
     printf("REGISTERS_COUNT:     0x%08x\n", REGISTERS_COUNT);
@@ -158,3 +159,28 @@ void resetFlagsRegister(int b){
 int getFlagsRegister(int b){
     return FLAGS & (1<<b);
 }
+
+void setSP(AddressType p){
+    AddressType SP = p;
+    setMEMD(SPL, (DataType)(SP & 0x00FF));
+    setMEMD(SPH, (DataType)(SP >> 8)); // StackPointer w dwoch 8 bitowych wartosciach w Data Memory
+}
+
+AddressType getSP(void){
+    AddressType SP = (getMEMD(SPH) << 8) | getMEMD(SPL); //scalenie StackPointera z dwoch 8 bitowych wartosci w Data Memory
+    return SP;
+}
+
+void incSP(void){
+    AddressType SP = getMEMD(SPL) | (getMEMD(SPH) << 8);
+    SP++;
+    setMEMD( SPL, (DataType)(SP & 0xFF) );
+    setMEMD( SPH, (DataType)(SP >> 8) );
+}
+void decSP(void){
+    AddressType SP = getMEMD(SPL) | (getMEMD(SPH) << 8);
+    SP--;
+    setMEMD( SPL, (DataType)(SP & 0xFF) );
+    setMEMD( SPH, (DataType)(SP >> 8) );
+}
+

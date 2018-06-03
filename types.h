@@ -23,4 +23,8 @@ typedef unsigned long               CounterType;
 //Znaczenie flag
 #define FLAG_C                      0x01
 
+//Adresy Rejestrow
+#define SPL                         0x5D
+#define SPH                         0x5E
+
 #endif //__TYPES_H__
