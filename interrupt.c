@@ -2,6 +2,7 @@
 #include "gpio.h"
 #include "types.h"
 #include "mem_abs.h"
+#include "interpreter.h"
 
 void initInterrupt(void){
     //....
@@ -21,10 +22,17 @@ void checkInterrupt(long counter){
 	{
         if(((getMEMD(0x4D) & 0b10000000)>>7)==1) //SPIF0 - sprawdzamy, czy SPI wystawilo flage
         {
+            CodeType T;
             printf("Start INT for SPI!!!\n");
-            printf("Something important going on...\n");
+            setPC(0x0001);
+            T=getOpcode();
+            doInstr(T);
+            T=getOpcode();
+            doInstr(T);
             setMEMD(0x4D,(getMEMD(0x4D)&0x7F));
             set_ss(0);
+            T=getOpcode();
+            doInstr(T);
             printf("End of INT for SPI!!!\n");
         }
 	}
