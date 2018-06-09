@@ -43,6 +43,7 @@ void doInstr(CodeType T){
                 F_OUT();
             else
                 F_IN();
+            break;
 
         //...
         default:

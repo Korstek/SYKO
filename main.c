@@ -15,19 +15,19 @@
 #define FILE_OUT                "file_gpio_out.txt"
 
 void saveCPUState(void){
-    saveMEMD(FILE_DATA);        //Zapisz zawartoœæ pamiêci danych do pliku
-    savePC(FILE_PC);            //Zapisz wartoœc PC
+    saveMEMD(FILE_DATA);        //Zapisz zawartoï¿½ï¿½ pamiï¿½ci danych do pliku
+    savePC(FILE_PC);            //Zapisz wartoï¿½c PC
     saveCounter(FILE_COUNTER);  //Zapisz liczbe wykonanych cykli
 }
 int main(int argc, char *argv[]) {
     long counter=0, max_counter=0, i=0;      //liczba wykonanych instrukcji i zadana liczba instrukcji do wykonania
     long int_gen=-1;
-    CodeType T;                         //zmienna pomocnicza - ma przechowywaæ opcode instrukcji
+    CodeType T;                         //zmienna pomocnicza - ma przechowywaï¿½ opcode instrukcji
 
-    loadMEMC(FILE_CODE);                //£adowanie pamiêci kodu z pliku
-    loadMEMD(FILE_DATA);                //£adowanie pamiêci danych z pliku (w tym rejestrówm)
-    loadPC(FILE_PC);                    //£adowanie wartoœci PC
-    loadCounter(FILE_COUNTER);          //£adowanie licznika cykli
+    loadMEMC(FILE_CODE);                //ï¿½adowanie pamiï¿½ci kodu z pliku
+    loadMEMD(FILE_DATA);                //ï¿½adowanie pamiï¿½ci danych z pliku (w tym rejestrï¿½wm)
+    loadPC(FILE_PC);                    //ï¿½adowanie wartoï¿½ci PC
+    loadCounter(FILE_COUNTER);          //ï¿½adowanie licznika cykli
 
     dumpMEMConfiguration();
 
@@ -36,18 +36,21 @@ int main(int argc, char *argv[]) {
         max_counter+=getCounter();
     }
     if(max_counter==0){
-        max_counter=getCounter()+1;     //nie podanie argumentu wywolania lub b³edne jego podanie - ustala wykonanie jednego cyklu
+        max_counter=getCounter()+1;     //nie podanie argumentu wywolania lub bï¿½edne jego podanie - ustala wykonanie jednego cyklu
     }
     if(argc>2){                         //drugi parametr wywolania okresla liczbe instrukcji po ktorych ma byc wygenerowane przerwanie
         int_gen=strtoul(argv[2], NULL, 10);
     }
     if(int_gen==0){
-        int_gen=-1;                     //nie podanie argumentu wywolania lub b³edne jego podanie - ustala wykonanie jednej instrukcji
+        int_gen=-1;                     //nie podanie argumentu wywolania lub bï¿½edne jego podanie - ustala wykonanie jednej instrukcji
     }
     if(int_gen>0)
         set_intterrupt(int_gen);        //zapamietaj kiedy wywolac przerwanie
 
     int spi_state[3][max_counter];
+
+    setSP(0x08FF);
+    printf("SP: 0x%04X\n", getSP());
 
     gpio_init();
     spi_init();
@@ -60,11 +63,11 @@ int main(int argc, char *argv[]) {
         spi_state[1][getCounter()]=get_shift_register();
         spi_state[2][getCounter()]=get_ss();
 
-        T=getOpcode();                  //T=opcode operacji (w³¹cznie z arg. wbudowanym)
+        T=getOpcode();                  //T=opcode operacji (wï¿½ï¿½cznie z arg. wbudowanym)
         doInstr(T);                     //wykonaj instrukcje
-        checkInterrupt(getCounter());   //sprawdŸ czy trzeba wygenerowac przerwanie
+        checkInterrupt(getCounter());   //sprawdï¿½ czy trzeba wygenerowac przerwanie
 
-        if(getCounter()>=max_counter){  //czy wykonano zadan¹ liczbê cykli
+        if(getCounter()>=max_counter){  //czy wykonano zadanï¿½ liczbï¿½ cykli
             saveCPUState();
 
             FILE *fp;
@@ -82,6 +85,6 @@ int main(int argc, char *argv[]) {
     }
 
     printf("Bledne wykonanie emulacji (PC=0x%08lx, T=0x%08lx)\r\n", getPC(), T);
-    saveCPUState();                     //!!! - Tu niepowinnismy siê nigdy znaleŸæ
+    saveCPUState();                     //!!! - Tu niepowinnismy siï¿½ nigdy znaleï¿½ï¿½
     return -2;
 }

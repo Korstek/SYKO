@@ -8,7 +8,7 @@ void F_IN(void){
 
     printf("0x%04X[0x%04X]: IN R%d, R%d\n", getPC(), getOpcode(), A, Rd);
 
-    setRegister(Rd, getRegister(A));
+    setRegister(Rd, getRegister(A+REGISTERS_COUNT));
 
     setPC(getPC()+1);                                       //zwiększenie licznika rozkazów
 
