@@ -6,7 +6,7 @@
 #include "interpreter.h"
 #include "interrupt.h"
 
-//naglowki poszczegolnych opcodow 
+//naglowki poszczegolnych opcodow
 void F_ADD1(void);
 void F_RJMP(void);
 void F_IN(void);
@@ -15,7 +15,7 @@ void F_SBRS(void);
 void F_RET(void);
 //...
 
-//wzorce opcodow 
+//wzorce opcodow
 #define ID_ADD_R1_R2            0x01
 #define ID_OUT_N_IN             0x0B	//OUT: 1011 1xxx xxxx xxxx, IN: 1011 0xxx xxxx xxxx
 #define ID_RJMP                 0x0C
@@ -43,10 +43,11 @@ void doInstr(CodeType T){
                 F_OUT();
             else
                 F_IN();
+            break;
 
         //...
         default:
-            printf("Wykryto nieznana instrukcje (PC=0x%08lx, T=0x%04lx)\r\n", getPC(), T);
+            printf("Wykryto nieznana instrukcje (PC=0x%08lx, T=0x%04lX)\r\n", getPC(), T);
             saveCPUState();
             exit(-1);
     }
