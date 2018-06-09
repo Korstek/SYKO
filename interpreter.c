@@ -19,7 +19,7 @@ void F_RET(void);
 #define ID_ADD_R1_R2            0x01
 #define ID_OUT_N_IN             0x0B	//OUT: 1011 1xxx xxxx xxxx, IN: 1011 0xxx xxxx xxxx
 #define ID_RJMP                 0x0C
-#define ID_SBRS                 0x0F
+#define ID_SBRS                 0x7F
 #define ID_RET                  0x09
 //...
 
