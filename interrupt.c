@@ -24,15 +24,19 @@ void checkInterrupt(long counter){
         {
             CodeType T;
             printf("Start INT for SPI!!!\n");
+            decSP();                            //Poczatek przerwania - PC jest odlozony na stos
+            setMEMD(getSP(),getPC() & 0x00FF);
+            decSP();
+            setMEMD(getSP(),getPC() & 0xFF00);
             setPC(0x0001);
             T=getOpcode();
-            doInstr(T);
+            doInstr(T);                         //RJMP
             T=getOpcode();
-            doInstr(T);
-            setMEMD(0x4D,(getMEMD(0x4D)&0x7F));
+            doInstr(T);                         //IN
+            setMEMD(0x4D,(getMEMD(0x4D)&0x7F)); //wyzerowanie flagi
             set_ss(0);
             T=getOpcode();
-            doInstr(T);
+            doInstr(T);                         //RET
             printf("End of INT for SPI!!!\n");
         }
 	}
