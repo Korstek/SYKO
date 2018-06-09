@@ -120,8 +120,8 @@ void saveMEMD(char *file){        //zapisz zawartoœæ pamiêci danych do pliku
     close(file_ptr);
 }
 CodeType getMEMC(AddressType p){
-    CodeType t=(MEMC[p] & 0xFF00)>>8 | (MEMC[p] & 0x00FF)<<8;		//Endianess correction
-    return t;
+    //CodeType t=(MEMC[p] & 0xFF00)>>8 | (MEMC[p] & 0x00FF)<<8; tymczasowo usuniete - z jakiegoś powodu nastepuje podwujna zamiana
+    return MEMC[p];
 }
 DataType getMEMD(AddressType p){
     return MEMD[p];
