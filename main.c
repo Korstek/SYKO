@@ -49,8 +49,7 @@ int main(int argc, char *argv[]) {
 
     int spi_state[3][max_counter];
 
-    setSP(0x08FF);
-    printf("SP: 0x%04X\n", getSP());
+    setSP(0x08FF); //zdefiniowanie adresu poczatkowego wskaźnika stosu (ostatni adres pamieci SRAM)
 
     gpio_init();
     spi_init();

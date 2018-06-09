@@ -13,6 +13,7 @@ void F_IN(void);
 void F_OUT(void);
 void F_SBRS(void);
 void F_RET(void);
+void F_SBI(void);
 //...
 
 //wzorce opcodow
@@ -21,6 +22,7 @@ void F_RET(void);
 #define ID_RJMP                 0x0C
 #define ID_SBRS                 0x7F
 #define ID_RET                  0x09
+#define ID_SBI                  0x9A
 //...
 
 
@@ -43,6 +45,9 @@ void doInstr(CodeType T){
                 F_OUT();
             else
                 F_IN();
+            break;
+        case ID_SBI:
+            F_SBI();
             break;
 
         //...

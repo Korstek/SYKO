@@ -25,4 +25,4 @@ add_executable(SYKO
         README.md
         spi.c
         spi.h
-        types.h f_in.c f_out.c f_sbrs.c f_ret.c)
+        types.h f_in.c f_out.c f_sbrs.c f_ret.c f_sbi.c)

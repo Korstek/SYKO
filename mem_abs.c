@@ -23,6 +23,7 @@ DataType    FLAGS;                  //flagi procesora
 CounterType counter;                //licznik wykonanych cykli
 AddressType SP;                     //Stack Pointer
 
+
 void dumpMEMConfiguration(void){
     printf("REGISTERS_COUNT:     0x%08x\n", REGISTERS_COUNT);
     printf("MAX_REGISTER:        0x%08x\n", MAX_REGISTER);
@@ -164,6 +165,7 @@ void setSP(AddressType p){
     AddressType SP = p;
     setMEMD(SPL, (DataType)(SP & 0x00FF));
     setMEMD(SPH, (DataType)(SP >> 8)); // StackPointer w dwoch 8 bitowych wartosciach w Data Memory
+    printf("SP: 0x%04X\n", SP);
 }
 
 AddressType getSP(void){
