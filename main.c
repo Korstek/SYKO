@@ -58,14 +58,14 @@ int main(int argc, char *argv[]) {
         gpio();
         spi();
 
-        spi_state[0][getCounter()]=get_sck();  //zbieranie interesujacych nas parametrow do jednej tabeli
-        spi_state[1][getCounter()]=get_shift_register();
-        spi_state[2][getCounter()]=get_ss();
-        spi_state[3][getCounter()]=getRegister(16);
-
         T=getOpcode();                  //T=opcode operacji (w��cznie z arg. wbudowanym)
         doInstr(T);                     //wykonaj instrukcje
         checkInterrupt(getCounter());   //sprawd� czy trzeba wygenerowac przerwanie
+
+        spi_state[0][getCounter()-1]=get_sck();  //zbieranie interesujacych nas parametrow do jednej tabeli
+        spi_state[1][getCounter()-1]=get_shift_register();
+        spi_state[2][getCounter()-1]=get_ss();
+        spi_state[3][getCounter()-1]=getRegister(16);
 
         if(getCounter()>=max_counter){  //czy wykonano zadan� liczb� cykli
             saveCPUState();
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
                 printf("OUT file not found!\n");
             fprintf(fp, "Counter\tSCK\tShift Register\tSS\tR16\n");
             for(i=0;i<max_counter;i++)
-                fprintf(fp, "%d\t\t%d\t0x%02x\t\t\t%d\t0x%02x\n",i,spi_state[0][i],spi_state[1][i],spi_state[2][i],spi_state[3][i]);
+                fprintf(fp, "%d\t%d\t0x%02x\t%d\t0x%02x\n",i,spi_state[0][i],spi_state[1][i],spi_state[2][i],spi_state[3][i]);
             fclose (fp);
 
             return 0;
