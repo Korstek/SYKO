@@ -113,15 +113,18 @@ void spi_init() //Pierwsze załadowanie wszystkich rejestrów
 *********************************************/
 void spi(void) //powtarzane przy każdym "takcie"
 {
-    if((divider(getCounter())==1)&&(prev_count==0)&&((getMEMD(0x4D)&0x80)==0x00))
+    if(get_ss()==0)
     {
-        shift_reg_count++;
-        shift_register(get_miso());
-        if(shift_reg_count==8)
+        if((divider(getCounter())==1)&&(prev_count==0)&&((getMEMD(0x4D)&0x80)==0x00))
         {
-            shift_reg_count=0;
-            setMEMD(0x4D,(getMEMD(0x4D)&0x7F)|0x80); //ustawianie flagi SPIF0 po odebraniu
-            printf("SPIF0! | shift_register: 0x%02x\n",getMEMD(0x4E));
+            shift_reg_count++;
+            shift_register(get_miso());
+            if(shift_reg_count==8)
+            {
+                shift_reg_count=0;
+                setMEMD(0x4D,(getMEMD(0x4D)&0x7F)|0x80); //ustawianie flagi SPIF0 po odebraniu
+                printf("SPIF0! | shift_register: 0x%02x\n",getMEMD(0x4E));
+            }
         }
     }
     prev_count=divider(getCounter()); //warunki sluza do sprawdzania zmiany stanu ("rising_edge")
