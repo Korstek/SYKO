@@ -121,7 +121,6 @@ void spi(void) //powtarzane przy każdym "takcie"
         {
             shift_reg_count=0;
             setMEMD(0x4D,(getMEMD(0x4D)&0x7F)|0x80); //ustawianie flagi SPIF0 po odebraniu
-            set_ss(1); //ustawianie SS na 1 - informacja o przetwarzaniu danych dla slavea
             printf("SPIF0! | shift_register: 0x%02x\n",getMEMD(0x4E));
         }
     }

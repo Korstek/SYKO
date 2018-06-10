@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
     if(int_gen>0)
         set_intterrupt(int_gen);        //zapamietaj kiedy wywolac przerwanie
 
-    int spi_state[3][max_counter];
+    int spi_state[4][max_counter];
 
     setSP(0x08FF); //zdefiniowanie adresu poczatkowego wskaźnika stosu (ostatni adres pamieci SRAM)
 
@@ -61,6 +61,7 @@ int main(int argc, char *argv[]) {
         spi_state[0][getCounter()]=get_sck();  //zbieranie interesujacych nas parametrow do jednej tabeli
         spi_state[1][getCounter()]=get_shift_register();
         spi_state[2][getCounter()]=get_ss();
+        spi_state[3][getCounter()]=getRegister(16);
 
         T=getOpcode();                  //T=opcode operacji (w��cznie z arg. wbudowanym)
         doInstr(T);                     //wykonaj instrukcje
@@ -74,9 +75,9 @@ int main(int argc, char *argv[]) {
 
             if ((fp = fopen (FILE_OUT, "w")) == NULL)
                 printf("OUT file not found!\n");
-            fprintf(fp, "Counter\tSCK\tShift Register\tSS\n");
+            fprintf(fp, "Counter\tSCK\tShift Register\tSS\tR16\n");
             for(i=0;i<max_counter;i++)
-                fprintf(fp, "%d\t%d\t0x%02x\t\t%d\n",i,spi_state[0][i],spi_state[1][i],spi_state[2][i]);
+                fprintf(fp, "%d\t\t%d\t0x%02x\t\t\t%d\t0x%02x\n",i,spi_state[0][i],spi_state[1][i],spi_state[2][i],spi_state[3][i]);
             fclose (fp);
 
             return 0;

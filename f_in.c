@@ -6,7 +6,7 @@ void F_IN(void){
     DataType Rd=(getOpcode() & 0x01F0)>>4;                       //identyfikacja numeru rejestru arg. 1
     DataType A=((getOpcode() & 0x0600)>>5) | (getOpcode() & 0x000F);                  //identyfikacja numeru rejestru arg. 2
 
-    printf("0x%04X[0x%04X]: IN R%d, R%d\n", getPC(), getOpcode(), A, Rd);
+    printf("0x%04X[0x%04X]: IN R%d, R%d\n", getPC(), getOpcode(), Rd, A);
 
     setRegister(Rd, getRegister(A+REGISTERS_COUNT));
 
