@@ -10,7 +10,7 @@ void F_CBI(void){
     result=0xFF<<(b+1) | 0xFF>>(8-b);
     setRegister(A+REGISTERS_COUNT,getRegister(A+REGISTERS_COUNT) & result);
 
-    printf("0x%04X[0x%04X]: CBI R%d, 0x%02X\n", getPC(), getOpcode(), A, result);
+    printf("0x%04X[0x%04X]: CBI R%d & 0x%02X\n", getPC(), getOpcode(), A, result);
 
     setPC(getPC()+1);
     addCounter(1);
