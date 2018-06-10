@@ -34,7 +34,8 @@ void checkInterrupt(long counter){
             T=getOpcode();
             doInstr(T);                         //IN
             setMEMD(0x4D,(getMEMD(0x4D)&0x7F)); //wyzerowanie flagi
-            set_ss(0);
+            T=getOpcode();
+            doInstr(T);                         //SBI
             T=getOpcode();
             doInstr(T);                         //RET
             printf("End of INT for SPI!!!\n");

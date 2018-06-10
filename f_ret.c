@@ -11,6 +11,8 @@ void F_RET(void){
     incSP(); //zmniejszenie rozmiaru stosu
     newPC = newPC | A; //przypisanie mlodszej czesci slowa
 
+    printf("0x%04X[0x%04X]: RET 0x%04X\n", getPC(), getOpcode(), newPC);
+
     setPC(newPC);
     addCounter(1);
 }
