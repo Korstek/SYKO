@@ -13,7 +13,7 @@ void F_IN(void);
 void F_OUT(void);
 //void F_SBRS(void);
 void F_RET(void);
-void F_SBI(void);
+void F_CBI(void);
 //...
 
 //wzorce opcodow
@@ -21,7 +21,7 @@ void F_SBI(void);
 #define ID_OUT_N_IN             0x0B	//OUT: 1011 1xxx xxxx xxxx, IN: 1011 0xxx xxxx xxxx
 #define ID_RJMP                 0x0C
 //#define ID_SBRS                 0x7F
-#define ID_RET_OR_SBI           0x09    //RET: 1001 0101 0000 1000, SBI: 1001 1010 xxxx xxxx
+#define ID_RET_OR_CBI           0x09    //RET: 1001 0101 0000 1000, CBI: 1001 1000 xxxx xxxx
 //...
 
 
@@ -36,11 +36,11 @@ void doInstr(CodeType T){
         case ID_RJMP:           //wywolac instrukcje RJMP
             F_RJMP();
             break;
-        case ID_RET_OR_SBI:
+        case ID_RET_OR_CBI:
             if((T & 0x0FFF)==0x0508)
                 F_RET();
             else
-                F_SBI();
+                F_CBI();
             break;
         case ID_OUT_N_IN:        //wywolac instrukcje OUT lub IN
             if((T & 0x0800)!=0)

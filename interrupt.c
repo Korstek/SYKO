@@ -29,16 +29,7 @@ void checkInterrupt(long counter){
             decSP();
             setMEMD(getSP(),getPC() & 0xFF00);
             setPC(0x0001);
-            T=getOpcode();
-            doInstr(T);                         //RJMP
-            T=getOpcode();
-            doInstr(T);                         //IN
-            setMEMD(0x4D,(getMEMD(0x4D)&0x7F)); //wyzerowanie flagi
-            T=getOpcode();
-            doInstr(T);                         //SBI
-            T=getOpcode();
-            doInstr(T);                         //RET
-            printf("End of INT for SPI!!!\n");
+            setMEMD(0x4D,(getMEMD(0x4D)&0x7F));
         }
 	}
 }
