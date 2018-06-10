@@ -113,9 +113,9 @@ void spi_init() //Pierwsze załadowanie wszystkich rejestrów
 *********************************************/
 void spi(void) //powtarzane przy każdym "takcie"
 {
-    if((getMEMD(0x4C)&0x40)==0x40)
+    if(get_ss()==0) //Sprawdzanie SPE0
     {
-        if((divider(getCounter())==1)&&(prev_count==0)&&((getMEMD(0x4D)&0x80)==0x00))
+        if((divider(getCounter())==1)&&(prev_count==0)&&((getMEMD(0x4D)&0x80)==0x00)) //warunek ("rising_edge") i flaga SPIF0
         {
             shift_reg_count++;
             shift_register(get_miso());
