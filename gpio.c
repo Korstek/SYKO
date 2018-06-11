@@ -18,10 +18,9 @@ int div_count, transmission_counter; //okresla ile razy sygnal sie zmienil, czas
 *********************************************/
 void gpio_init()
 {
-    // /* rozwiązanie awaryjne - należy usunąć przed oddaniem
     setMEMD(0x24,0x2C);
     setMEMD(0x25,0x04);
-    // */
+    
     DDRB_REGISTER=getMEMD(0x24);
 
     int DDRB5=(DDRB_REGISTER & 0b00100000)>>5;
