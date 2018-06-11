@@ -25,10 +25,8 @@ int prev_count, shift_reg_count;
 *********************************************/
 void spi_init() //Pierwsze załadowanie wszystkich rejestrów
 {
-    // /* rozwiązanie awaryjne - należy usunąć przed oddaniem
     setMEMD(0x4C,0xDC);
     setMEMD(0x4D,0x00);
-    // */
 
     SPI_CONTROL_REGISTER=getMEMD(0x4C);
     SPI_STATUS_REGISTER=getMEMD(0x4D);
@@ -113,18 +111,15 @@ void spi_init() //Pierwsze załadowanie wszystkich rejestrów
 *********************************************/
 void spi(void) //powtarzane przy każdym "takcie"
 {
-    if(get_ss()==0) //Sprawdzanie SPE0
+    if((divider(getCounter())==1)&&(prev_count==0)&&((getMEMD(0x4D)&0x80)==0x00)) //warunek ("rising_edge") i flaga SPIF0
     {
-        if((divider(getCounter())==1)&&(prev_count==0)&&((getMEMD(0x4D)&0x80)==0x00)) //warunek ("rising_edge") i flaga SPIF0
+        shift_reg_count++;
+        shift_register(get_miso());
+        if(shift_reg_count==8)
         {
-            shift_reg_count++;
-            shift_register(get_miso());
-            if(shift_reg_count==8)
-            {
-                shift_reg_count=0;
-                setMEMD(0x4D,(getMEMD(0x4D)&0x7F)|0x80); //ustawianie flagi SPIF0 po odebraniu
-                printf("SPIF0! | shift_register: 0x%02x\n",getMEMD(0x4E));
-            }
+            shift_reg_count=0;
+            setMEMD(0x4D,(getMEMD(0x4D)&0x7F)|0x80); //ustawianie flagi SPIF0 po odebraniu
+            printf("SPIF0! | shift_register: 0x%02x\n",getMEMD(0x4E));
         }
     }
     prev_count=divider(getCounter()); //warunki sluza do sprawdzania zmiany stanu ("rising_edge")

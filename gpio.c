@@ -4,7 +4,7 @@
 #include "mem_abs.h"
 
 #define FILE_GPIO_IN               "file_gpio_in.txt"
-#define length                      10
+#define length                      20
 
 DataType DDRB_REGISTER;
 CounterType gpio_in[length];
@@ -62,18 +62,15 @@ void gpio(void)
 *********************************************/
 void signal(void)
 {
-    if(get_ss()==0)
+    if(gpio_in[div_count]==transmission_counter)
     {
-        if(gpio_in[div_count]==transmission_counter)
-        {
-            div_count++;
-            if(div_count%2==0)
-                set_miso(0);
-            else
-                set_miso(1);
-        }
-        transmission_counter++;
+        div_count++;
+        if(div_count%2==0)
+            set_miso(0);
+        else
+            set_miso(1);
     }
+    transmission_counter++;
 }
 
 /********************************************
