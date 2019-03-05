@@ -1,2 +1,2 @@
 # SYKO
-Symulacja niektórych instrukcji i peryferiów mikrokontrolera Atmega
+Symulacja przerwań, niektórych instrukcji i peryferiów mikrokontrolera Atmega
